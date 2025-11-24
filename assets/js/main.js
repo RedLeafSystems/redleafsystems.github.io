@@ -52,34 +52,38 @@ document.addEventListener('DOMContentLoaded',function(){
   });
 
   // Cursor-following highlight for buttons
-  const cursor = document.createElement('div');
-  cursor.className = 'cursor-highlight';
-  document.body.appendChild(cursor);
+  // Only enable on devices that support hover & fine pointer (i.e., not touch/mobile)
+  const supportsHover = window.matchMedia && window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  if(supportsHover){
+    const cursor = document.createElement('div');
+    cursor.className = 'cursor-highlight';
+    document.body.appendChild(cursor);
 
-  let targetX = -100, targetY = -100, currentX = -100, currentY = -100;
-  function lerp(a,b,n){return (1-n)*a + n*b}
-  let rafId = null;
-  function animateCursor(){
-    currentX = lerp(currentX, targetX, 0.18);
-    currentY = lerp(currentY, targetY, 0.18);
-    cursor.style.left = currentX + 'px';
-    cursor.style.top = currentY + 'px';
+    let targetX = -100, targetY = -100, currentX = -100, currentY = -100;
+    function lerp(a,b,n){return (1-n)*a + n*b}
+    let rafId = null;
+    function animateCursor(){
+      currentX = lerp(currentX, targetX, 0.18);
+      currentY = lerp(currentY, targetY, 0.18);
+      cursor.style.left = currentX + 'px';
+      cursor.style.top = currentY + 'px';
+      rafId = requestAnimationFrame(animateCursor);
+    }
     rafId = requestAnimationFrame(animateCursor);
-  }
-  rafId = requestAnimationFrame(animateCursor);
 
-  document.querySelectorAll('.btn').forEach(b=>{
-    b.addEventListener('mouseenter', function(e){
-      cursor.classList.add('visible');
-      targetX = e.clientX; targetY = e.clientY;
+    document.querySelectorAll('.btn').forEach(b=>{
+      b.addEventListener('mouseenter', function(e){
+        cursor.classList.add('visible');
+        targetX = e.clientX; targetY = e.clientY;
+      });
+      b.addEventListener('mousemove', function(e){
+        targetX = e.clientX; targetY = e.clientY;
+      });
+      b.addEventListener('mouseleave', function(){
+        cursor.classList.remove('visible');
+      });
     });
-    b.addEventListener('mousemove', function(e){
-      targetX = e.clientX; targetY = e.clientY;
-    });
-    b.addEventListener('mouseleave', function(){
-      cursor.classList.remove('visible');
-    });
-  });
+  }
 
   // Page-load shimmer: create a sweep that runs once and removes itself
   (function runShimmerOnce(){
