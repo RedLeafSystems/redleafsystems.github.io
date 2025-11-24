@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>ManageIt — RedLeaf Systems</title>
+    <meta name="description" content="ManageIt by RedLeaf Systems — Inventory tracking and management">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/styles.css">
+
+    <!-- Video.js base CSS -->
+    <link href="https://unpkg.com/video.js@7/dist/video-js.min.css" rel="stylesheet">
+    <!-- Video.js theme CSS -->
+    <link href="https://unpkg.com/@videojs/themes@1/dist/sea/index.css" rel="stylesheet">
+  </head>
+  <body>
+    <header id="top" class="site-header">
+      <div class="container header-inner">
+        <a class="brand" href="index.html">
+          <img src="assets/media/logo.svg" alt="RedLeaf Systems Logo" class="logo" width="40" height="40">
+          <span class="brand-text">RedLeaf <strong>Systems</strong> > <b>The story of ManageIt</b></span>
+        </a>
+
+        <nav class="nav" id="mainNav">
+          <ul>
+            <li><a href="index.html#about">About</a></li>
+            <li><a href="index.html#apps">Apps</a></li>
+            <li><a href="index.html#contact">Contact</a></li>
+          </ul>
+        </nav>
+
+        <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">☰</button>
+      </div>
+    </header>
+
+    <main>
+      <section class="section container">
+        <article class="readable">
+          <h1>ManageIt</h1>
+
+          <h2>Building the app</h2>
+          <p>
+Hi, I'm Ben, and today, I'll be showcasing ManageIt, an inventory application that I made for my family
+to keep track of the food we have. While it may seem like a simple concept, it was harder than you might
+think to implement it all.
+
+<br><br>
+
+But let's begin before I started making this app. Why did we even need it in the first place? Well… my
+family used to have one freezer, a small one. But as my brother and I got older, we needed more food, and
+much of it was seasonal and not easily obtainable, so we needed to stockpile. Therefore, we got another
+freezer, a medium sized one. Then we discovered the UBC farm blueberry u-pick, where we could pick our
+own organic blueberries. As the years went by, we got better and better at picking, easily doing over 75
+pounds of berries in a single day. This produced a lot of blueberries, and therefore, we needed to store
+them somewhere so we could have a good supply of frozen blueberries over the year. We bought another freezer,
+a large one, and yet another freezer. We now have 6 freezers in our house, filled with blueberries,
+raspberries, bread from the farmer's market, and much, much more! Then we had lists, and lists of lists,
+to keep track of all the items we had. There were lists for each freezer and lists comprising things spread
+across multiple freezers. And there were crossed out items, and things that no one could decipher, and
+duplicates, and, of course, nothing was sorted. How would we know when we were close to running out of
+a certain item? I decided that I needed to build an app to fix this problem. I needed it to have categories,
+for example, meals, or vegetables. Inside each category would be items, each with a name, count and date,
+(for example, blackberry puree, 5, June 5th, 2025).
+
+<br><br>
+
+Now for the actual building of the app. I had two main programming languages I could build the app in -- Java
+or C#. After much consideration, I decided to go with C# as I generally find Java to be buggier and less
+intuitive to work with. Then, I had to pick the SDK (software development kit) that I would be working with.
+An SDK is what helps you build your app by giving you pre-built components like buttons. There were two
+options: .NET MAUI and UNO Platform. Since both are pretty much identical for everything except for styling,
+I picked the one that I found the most aesthetically pleasing -- .NET MAUI. Then, I got coding.
+
+<br><br>
+
+First, I had to lay out all the components for my app. A header, buttons, text labels, and a large data grid
+for showing the categories' items. But the components, of course, were all blank and did nothing when pressed.
+It was time to code! I started by implementing some basic logic, ignoring the categories and just focusing on
+creating, editing and deleting items. After much trial and error, I got that part working. Then I went to
+implement the categories, but found that the entire backend of the code (all the variables and lists that
+I'd setup for storing the items) had to be entirely redone to allow for them to be placed in categories.
+After that, I had to implement autosaving of the data, so when you closed the app, your categories and items
+wouldn't be lost.
+
+<br><br>
+
+Then came the testing. Testing is (in my opinion) probably the most stressful part of making an app, as it
+determines how many hours you have to spend debugging issues, which is a pretty painful process if the issues
+aren't obvious (as they mostly aren't). Surprisingly, while undergoing testing, I saw relatively few issues.
+I colored all the elements in my app with bright, garish colors so as to make figuring out which component
+was where easier. There were a number of glitches, but they were easily fixable, except for one -- the main
+grid of items within a category refused to size on its vertical axis correctly, and I couldn't seem to change
+it. I still haven't figured out a way to do it, as it seems to be an bug with the control itself and not
+anything I can change.
+
+<br><br>
+
+And with that, the app was ready for release -- kind of. I still had to remove a bunch of functions and checks
+that I had put into the code for testing and debugging. I reverted the component's colours to more tasteful
+ones. After I did that, I could produce an APK file -- a file that would, when run on an Android device,
+install the application via a process called sideloading. When you want to get an app on an Android phone,
+you have to get it via one of two processes -- sideloading or the Google Play Store. The Google Play Store
+is similar to the Apple App Store in the way that you search for an app that you want, click a button to
+install it, and boom! It's on your device. In order for an app to appear on the Google Play Store, the
+developer must pay a fee and get their app verified by Google. This ensures that most apps on the Play Store
+are safe, (though there are several cases where malware has slipped through). Sideloading an app is more
+complicated and dangerous, as there is no virus scanning. Developers who do not want to verify with Google
+or pay the fee to be on the Play Store can publish an APK file to a website. An Android user can download
+the APK file, then allow some restricted permissions in the device settings, and install the APK directly.
+This is what is known as sideloading. The app, once installed, would behave like it was downloaded from the
+Play Store. Google is trying to make APK developers verify with their IDs before their apps can be installed
+onto a device, which is causing a lot of controversy. But that's beside the point.
+
+<br><br>
+
+<b>So... here's the result:</b>
+<br>
+When we open the app for the first time, it creates a sample item in a sample category, but we can add new
+items using the plus button at the bottom, edit them by pressing on them, and delete them by pressing on
+them and selecting "delete". For categories, we can switch them using the switch button and pick a category
+to load. We can edit the name of a category by clicking on "edit", and add one by clicking on "add". All
+this data is autosaved, which is shown via the bar on the top of the screen. When we close the app, all our
+changes have been saved to a file, which will be ready for loading when we next launch the app.
+          </p>
+
+          <video
+            id="my-video"
+            class="video-js vjs-theme-sea"
+            controls
+            preload="auto"
+            data-setup="{}"
+            style="width: 100%; max-width: 100%;">
+            <source src="assets/media/App running.mp4" type="video/mp4"/>
+            <p class="vjs-no-js">
+              To view this video please enable JavaScript, and consider upgrading to a web browser that
+              supports HTML5 video.
+          </video>
+
+          <br><br>
+
+          <p>
+That's all for my project. While it's still a work in progress, I think I've done really good work on it so
+far and am happy with the current result!
+
+<br><br>
+
+In the future, I want to be able to enable sorting of items by name and date. I want to fix the bug with the
+grid of items going off the bottom of the screen. And, of course, I want to add more animations, optimize
+loading times as doing some actions sometimes causes the app to lag slightly, and finally, make the app look
+slightly more polished. Then I want to implement saving the items to an internet-connected database so multiple
+devices can edit the data. But that's all for a future release! For now, it still has most of the functions
+my family need.
+          </p>
+
+          <h2>Creation of this personal project</h2>
+          <p>
+            To create this Personal Project, I first noted down all the steps I had taken when building
+            the app in point form. Then I expanded on them and wrote a paragraph or more for each one.
+            I tried my best to explain it simply, so that anyone could understand it, even people less
+            experienced with technology. After that, I needed to record myself speaking through the script.
+            I had a microphone, but I didn't have a stand for it, so I created a custom model for it and
+            3D printed it using my 3D printer. Then, I recorded myself speaking through the script, messed
+            up the audio quality, and re-recorded it. Once I'd done that, I recorded videos of the app
+            running. I spliced in the recordings of my app running in the speaking sections using a very
+            powerful video editor, DaVinci Resolve.
+          </p>
+        </article>
+      </section>
+
+      <!-- Photo carousel here -->
+      <section class="section container">
+        <h2>Images of code</h2>
+        <p class="muted">Click a photo to expand it.</p>
+
+        <div class="photo-carousel" aria-label="ManageIt gallery">
+          <button class="carousel-nav carousel-prev" aria-label="Previous photos">‹</button>
+          <div class="carousel-track">
+            <div class="carousel-item"><img src="assets/media/Image carousel/Project configuration.jpg" alt="Project configuration code"></div>
+            <div class="carousel-item"><img src="assets/media/Image carousel/Saved indicator and grid of items.jpg" alt="Saved indicator and grid of items code"></div>
+            <div class="carousel-item"><img src="assets/media/Image carousel/Autosave.jpg" alt="Autosave code"></div>
+                        <div class="carousel-item"><img src="assets/media/Image carousel/Custom header.jpg" alt="Custom header code"></div>
+          </div>
+          <button class="carousel-nav carousel-next" aria-label="Next photos">›</button>
+        </div>
+      </section>
+    </main>
+
+		<footer class="site-footer">
+			<div class="container footer-inner">
+				<p>© <span id="year"></span> RedLeaf Systems -- Built with care.</p>
+				<nav class="footer-links">
+					<a href="#top">Back to top</a>
+				</nav>
+			</div>
+		</footer>
+
+    <script src="assets/js/main.js" defer></script>
+    <script src="https://vjs.zencdn.net/8.3.0/video.min.js"></script>
+
+    <script>
+  var player = videojs('my-video', {
+    fluid: true
+  });
+</script>
+  </body>
+</html>

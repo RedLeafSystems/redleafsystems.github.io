@@ -1,4 +1,98 @@
-<h1>Temporary placeholder site</h1>
-<p>This is a temporary placeholder site. The full website is under construction and will be available soon.</p>
-<p>In the meantime, please check back later for updates!</p>
-<p>Thank you for your patience.</p>
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1">
+		<title>RedLeaf Systems — Modern Software & Apps</title>
+		<meta name="description" content="RedLeaf Systems builds beautiful, reliable software: web apps, mobile apps and custom systems.">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+		<link rel="stylesheet" href="assets/css/styles.css">
+	</head>
+	<body>
+		<header id="top" class="site-header">
+			<div class="container header-inner">
+				<a class="brand" href="#">
+					<img src="assets/media/logo.svg" alt="RedLeaf Systems Logo" class="logo" width="40" height="40">
+					<span class="brand-text">RedLeaf <strong>Systems</strong></span>
+				</a>
+
+				<nav class="nav" id="mainNav">
+					<ul>
+						<li><a href="#about">About</a></li>
+						<li><a href="#apps">Apps</a></li>
+						<li><a href="#contact">Contact</a></li>
+					</ul>
+				</nav>
+
+				<button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">☰</button>
+			</div>
+		</header>
+
+		<main>
+			<section class="hero">
+				<div class="container hero-inner">
+					<div class="hero-text">
+						<h1>We build modern software that people love to use.</h1>
+						<p class="hero-ctas">
+							<a class="btn btn-primary" href="#apps">Our Apps</a>
+							<a class="btn btn-ghost" href="#contact">Get in touch</a>
+						</p>
+					</div>
+				</div>
+			</section>
+
+			<section id="about" class="section container about">
+				<h2>About RedLeaf Systems</h2>
+				<p>RedLeaf Systems is a focused team of engineers and designers building robust software and delightful user experiences. We ship fast, iterate with feedback, and scale systems the right way.</p>
+			</section>
+
+			<section id="apps" class="section container apps">
+				<h2>Featured Apps</h2>
+				<p class="muted">These are some of the apps we've made!</p>
+				<div class="grid app-grid">
+					<article class="app-card placeholder">
+						<div class="thumb"></div>
+						<h3>ManageIt</h3>
+						<p>Inventory tracking app</p>
+						<a class="btn btn-primary" href="manageit.html">View details</a>
+						<a class="btn btn-primary" href="manageit-story.html">The story</a>
+					</article>
+					<article class="app-card placeholder">
+						<div class="thumb"></div>
+						<h3>More coming soon!</h3>
+						<p>(Actually, we haven't coded much stuff yet, so it might not be that soon)</p>
+					</article>
+				</div>
+			</section>
+
+			<section id="team" class="section container team">
+				<h2>Team</h2>
+				<p class="muted">RedLeaf Systems is a small, indie company.</p>
+				<div class="grid team-grid">
+					<div class="member card">
+						<div class="avatar">BG</div>
+						<h4>Ben G</h4>
+						<p>Founder</p>
+					</div>
+				</div>
+			</section>
+
+			<section id="contact" class="section container contact">
+				<h2>Contact</h2>
+				<p>Contact us at <code>[no email yet]</code></p>
+			</section>
+		</main>
+
+		<footer class="site-footer">
+			<div class="container footer-inner">
+				<p>© <span id="year"></span> RedLeaf Systems -- Built with care.</p>
+				<nav class="footer-links">
+					<a href="#top">Back to top</a>
+				</nav>
+			</div>
+		</footer>
+
+		<script src="assets/js/main.js" defer></script>
+	</body>
+</html>
