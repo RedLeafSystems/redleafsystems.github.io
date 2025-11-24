@@ -12,13 +12,16 @@
     <link href="https://unpkg.com/video.js@7/dist/video-js.min.css" rel="stylesheet">
     <!-- Video.js theme CSS -->
     <link href="https://unpkg.com/@videojs/themes@1/dist/sea/index.css" rel="stylesheet">
+
   </head>
   <body>
     <header id="top" class="site-header">
       <div class="container header-inner">
         <a class="brand" href="index.html">
           <img src="assets/media/logo.svg" alt="RedLeaf Systems Logo" class="logo" width="40" height="40">
-          <span class="brand-text">RedLeaf <strong>Systems</strong> > <b>The story of ManageIt</b></span>
+          <span class="brand-text">
+            RedLeaf <strong>Systems</strong> > <b>The story of ManageIt</b>
+          </span>
         </a>
 
         <nav class="nav" id="mainNav">
@@ -37,6 +40,17 @@
       <section class="section container">
         <article class="readable">
           <h1>ManageIt</h1>
+
+          <media-theme-sutro-audio style="width:100%">
+            <audio
+              slot="media"
+              src="assets/media/Voiceover.mp3"
+              playsinline>
+            </audio>
+
+            <media-poster-image slot="poster" src="assets/media/voiceover album art.png" style="background: darkblue; padding: 5px;"></media-poster-image>
+          </media-theme-sutro-audio>
+
 
           <h2>Building the app</h2>
           <p>
@@ -133,7 +147,7 @@ changes have been saved to a file, which will be ready for loading when we next 
             <source src="assets/media/App running.mp4" type="video/mp4"/>
             <p class="vjs-no-js">
               To view this video please enable JavaScript, and consider upgrading to a web browser that
-              supports HTML5 video.
+              supports HTML5 video.</p>
           </video>
 
           <br><br>
@@ -160,9 +174,10 @@ my family need.
             experienced with technology. After that, I needed to record myself speaking through the script.
             I had a microphone, but I didn't have a stand for it, so I created a custom model for it and
             3D printed it using my 3D printer. Then, I recorded myself speaking through the script, messed
-            up the audio quality, and re-recorded it. Once I'd done that, I recorded videos of the app
-            running. I spliced in the recordings of my app running in the speaking sections using a very
-            powerful video editor, DaVinci Resolve.
+            up the audio quality, and re-recorded it. Once I'd done that, I started to edit together a video,
+            but decided that it was easier and more effective to make a website showcasing the project instead.
+            I made the website using HTML and CSS for the layout and styling, and a bit of JavaScript for interactivity.
+            Finally, I added images and a video to illustrate the app and its features.
           </p>
         </article>
       </section>
@@ -198,9 +213,11 @@ my family need.
     <script src="https://vjs.zencdn.net/8.3.0/video.min.js"></script>
 
     <script>
-  var player = videojs('my-video', {
-    fluid: true
-  });
-</script>
+      var player = videojs('my-video', {
+        fluid: true
+      });
+    </script>
+
+    <script type="module" src="https://cdn.jsdelivr.net/npm/player.style/sutro-audio/+esm"></script>
   </body>
 </html>
