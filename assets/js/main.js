@@ -3,17 +3,6 @@ document.addEventListener('DOMContentLoaded',function(){
   const yearEl = document.getElementById('year');
   if(yearEl) yearEl.textContent = new Date().getFullYear();
 
-  // Nav toggle for small screens
-  const navToggle = document.getElementById('navToggle');
-  const mainNav = document.getElementById('mainNav');
-  if(navToggle && mainNav){
-    navToggle.addEventListener('click',()=>{
-      const expanded = mainNav.style.display === 'block';
-      mainNav.style.display = expanded ? '' : 'block';
-      navToggle.setAttribute('aria-expanded', String(!expanded));
-    });
-  }
-
   // Smooth scroll for internal links
   document.querySelectorAll('a[href^="#"]').forEach(a=>{
     a.addEventListener('click',function(e){
