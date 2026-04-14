@@ -10,7 +10,7 @@
   --button:     #a30000;
   --button-hover: #ff5858;
   --border:     #ff0000;
-  --text:       #f0ebe3;
+  --text:       #ddcbae;
   --text-muted: #b0a89e;
   --text-dim:   #706860;
   --cream:      #ffe6bf;
@@ -21,16 +21,21 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=IBM+Plex+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap');
 
+@font-face {
+    font-family: "Aptos";
+    src: url(fonts/Aptos.ttf) format('truetype');
+}
+
 body {
     display: flex;
     flex-direction: column;
     align-items: normal;
-    font-family: 'DM Sans', sans-serif;
+    font-family: "Aptos", sans-serif;
     font-weight: 300;
     margin: 0;
     padding: 0;
     background-color: var(--bg);
-    color: var(--text);
+    color: var(--cream);
 }
 
 
@@ -195,10 +200,9 @@ hr {
     background-color: var(--bg-3);
     border-radius: 50px;
 }
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 700px) {
     .navbar {
         flex-direction: column;
-        gap: 10px;
         width: 100%;
         align-items: start;
         padding: 20px;
@@ -209,6 +213,7 @@ hr {
     display: flex;
     align-items: center;
     padding: 5px;
+    margin: 0 10px;
     background-color: var(--bg-4);
     text-decoration: none;
     border-radius: 3px;
@@ -226,7 +231,7 @@ hr {
     color: var(--text-dim);
     vertical-align: middle;
 }
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 700px) {
     .nav-vertical-spacer {
         display: none;
     }
@@ -234,7 +239,7 @@ hr {
 .nav-horizontal-spacer {
     display: none;
 }
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 700px) {
     .nav-horizontal-spacer {
         width: 100%;
         display: inline-block;
@@ -243,6 +248,7 @@ hr {
     }
 }
 .nav-link {
+    box-sizing: border-box;
     display: flex;
     align-items: center;
     font-family: 'IBM Plex Mono', monospace;
@@ -257,7 +263,7 @@ hr {
     border-radius: 3px;
     transition: all 0.5s;
 }
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 700px) {
     .nav-link {
         width: 100%;
     }
@@ -267,30 +273,62 @@ hr {
     color: var(--text);
     border-radius: 15px;
 }
-.nav-sub-link {
-    display: flex;
-    align-items: center;
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 17px;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--cream);
-    padding: 3px;
-    background-color: var(--bg-5);
-    text-decoration: none;
-    border-radius: 3px;
-    transition: all 0.5s;
+
+.nav-link-no-margin-right {
+    margin: 0 0 0 10px;
+    border-radius: 3px 0 0 3px;
 }
-@media screen and (max-width: 600px) {
-    .nav-sub-link {
-        box-sizing: border-box;
+.nav-link-no-margin-right:hover {
+    border-radius: 15px 0 0 15px;
+}
+/* On mobile, remove the margin and make the border-radius uniform for better stacking */
+@media screen and (max-width: 700px) {
+    .nav-link-no-margin-right {
+        display: inline-flex;
+        width: 50%;
+        margin: 0 0 0 10px;
+        border-radius: 3px;
+    }
+    .nav-link-no-margin-right:hover {
+        border-radius: 15px;
     }
 }
+.nav-link-no-margin-left {
+    margin: 0 10px 0 0;
+    border-radius: 0 3px 3px 0;
+}
+.nav-link-no-margin-left:hover {
+    border-radius: 0 15px 15px 0;
+}
+/* On mobile, remove the margin and make the border-radius uniform for better stacking */
+@media screen and (max-width: 700px) {
+    .nav-link-no-margin-left {
+        display: inline-flex;
+        width: 50%;
+        margin: 0;
+        border-radius: 3px;
+    }
+    .nav-link-no-margin-left:hover {
+        border-radius: 15px;
+    }
+}
+
 .nav-link-selected {
     background-color: var(--red-dim);
     pointer-events: none;
 }
 
+
+.horizontal-on-mobile {
+    display: flex;
+    flex-direction: row;
+    gap: 2px;
+}
+@media screen and (max-width: 700px) {
+    .horizontal-on-mobile {
+        width: 100%;
+    }
+}
 
 .footer {
     display: flex;
