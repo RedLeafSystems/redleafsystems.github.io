@@ -95,6 +95,11 @@ h3 em {
     color: var(--red);
 }
 
+p em {
+    font-style: italic;
+    color: var(--red);
+}
+
 
 .hero-full-height {
     display: flex;
