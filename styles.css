@@ -139,7 +139,6 @@ p em {
     display: grid;
     grid-template-columns: 1fr;
     gap: 16px;
-    padding: 16px;
     box-sizing: border-box;
 }
 @media (min-width: 1000px) {
@@ -149,6 +148,7 @@ p em {
 }
 .card {
     padding: 20px;
+    margin: 0;
     background-color: var(--bg-3);
     border-radius: 10px;
     border: #00000000 solid 1px;
