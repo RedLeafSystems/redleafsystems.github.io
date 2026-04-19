@@ -136,6 +136,7 @@ p em {
 
 
 .card-container {
+    padding-top: 15px;
     display: grid;
     grid-template-columns: 1fr;
     gap: 16px;
