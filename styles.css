@@ -37,6 +37,9 @@ body {
     background-color: var(--bg);
     color: var(--cream);
 }
+a {
+    color: var(--red);
+}
 
 
 /* Hide scrollbar for Chrome, Safari and Opera */
