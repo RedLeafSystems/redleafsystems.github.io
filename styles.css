@@ -190,6 +190,16 @@ hr {
 .button:hover {
     background-color: var(--button-hover);
 }
+.button-disabled {
+    background-color: var(--bg-4);
+    color: var(--text-dim);
+    pointer-events: none;
+}
+.big-button {
+    font-size: 1.25em;
+    padding: 10px 20px;
+    margin: 10px 0;
+}
 
 
 .navbar-container {
