@@ -122,6 +122,27 @@ p em {
     border-radius: 20px;
 }
 
+.hero-side-by-side-container {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+}
+@media (max-width: 700px) {
+    .hero-side-by-side-container {
+        flex-direction: column;
+    }
+}
+.hero-left {
+    flex: 1;
+}
+.hero-right {
+    flex: 0.3;
+}
+.hero-screenshot {
+    width: 100%;
+    overflow-y: hidden;
+}
+
 .hero-label {
     width: fit-content;
     font-family: 'IBM Plex Mono', monospace;
@@ -364,6 +385,16 @@ hr {
     color: var(--text-muted);
     font-size: 0.875em;
 }
+
+
+.video {
+    width: 100%;
+    max-width: 800px;
+    border-radius: 10px;
+    margin: 15px 0;
+    box-shadow: 4px 4px 8px var(--red-dim);
+}
+
 
 /* ---- Animations ---- */
 @keyframes fadeIn {
