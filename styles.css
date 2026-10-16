@@ -16,6 +16,7 @@
   --cream:      #ffe6bf;
   --white:      #ffffff;
   --black:      #000000;
+  --transparent: #00000000;
 }
 
 
@@ -223,14 +224,38 @@ hr {
 }
 
 
-.navbar-container {
-    display: flex;
-    justify-content: center;
-    width: 100%;
-    background-color: transparent;
-    margin: 0;
-    padding: 0;
+@media screen and (max-width: 800px) {
+    .spacer-under-nav-mobile {
+        height: 120px;
+    }
+
+    .navbar-container-mobile {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+        background-color: transparent;
+        margin: 0;
+        padding: 0;
+    }
 }
+@media screen and (min-width: 800px) {
+    .spacer-under-nav-desktop {
+        height: 80px;
+    }
+
+    .navbar-container-desktop {
+        position: fixed;
+        inset-inline: 0;
+        z-index: 9999;
+        display: flex;
+        justify-content: center;
+        width: auto;
+        background-color: transparent;
+        margin: 0;
+        padding: 0;
+    }
+}
+
 .navbar {
     width: fit-content;
     display: flex;
@@ -239,10 +264,15 @@ hr {
     gap: 2px;
     margin: 7px;
     padding: 15px;
-    background-color: var(--bg-3);
+
+    /* background-color: var(--bg-3); */
+
+    background-color: rgba(255, 255, 255, 0.199);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     border-radius: 50px;
 }
-@media screen and (max-width: 700px) {
+@media screen and (max-width: 800px) {
     .navbar {
         flex-direction: column;
         width: 100%;
@@ -256,13 +286,13 @@ hr {
     align-items: center;
     padding: 5px;
     margin: 5px;
-    background-color: var(--bg-4);
+    background-color: rgba(0, 0, 0, 0.212);
     text-decoration: none;
     border-radius: 3px;
     transition: all 0.5s;
 }
 .nav-logo:hover {
-    background-color: var(--button-hover);
+    background-color: rgba(0, 0, 0, 0.493);
     color: var(--red);
     border-radius: 15px;
 }
@@ -273,7 +303,7 @@ hr {
     color: var(--text-dim);
     vertical-align: middle;
 }
-@media screen and (max-width: 700px) {
+@media screen and (max-width: 800px) {
     .nav-vertical-spacer {
         display: none;
     }
@@ -281,7 +311,7 @@ hr {
 .nav-horizontal-spacer {
     display: none;
 }
-@media screen and (max-width: 700px) {
+@media screen and (max-width: 800px) {
     .nav-horizontal-spacer {
         width: calc(100% - 10px);
         display: block;
@@ -301,19 +331,28 @@ hr {
     color: var(--cream);
     margin: 5px;
     padding: 5px;
-    background-color: var(--bg-4);
+
+    background-color: rgba(0, 0, 0, 0.199);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+
     text-decoration: none;
+
+    /* border: 2px solid var(--transparent); */
     border-radius: 3px;
     transition: all 0.5s;
 }
-@media screen and (max-width: 700px) {
+@media screen and (max-width: 800px) {
     .nav-link {
         width: calc(100% - 10px);
     }
 }
 .nav-link:hover {
-    background-color: var(--button-hover);
     color: var(--text);
+    background-color: rgba(0, 0, 0, 0.493);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    /* border: 2px solid var(--red); */
     border-radius: 15px;
 }
 
@@ -325,7 +364,7 @@ hr {
     border-radius: 15px 0 0 15px;
 }
 /* On mobile, remove the margin and make the border-radius uniform for better stacking */
-@media screen and (max-width: 700px) {
+@media screen and (max-width: 800px) {
     .nav-link-no-margin-right {
         display: inline-flex;
         width: auto;
@@ -344,7 +383,7 @@ hr {
     border-radius: 0 15px 15px 0;
 }
 /* On mobile, remove the margin and make the border-radius uniform for better stacking */
-@media screen and (max-width: 700px) {
+@media screen and (max-width: 800px) {
     .nav-link-no-margin-left {
         display: inline-flex;
         width: 100%;
@@ -367,7 +406,7 @@ hr {
     flex-direction: row;
     gap: 0;
 }
-@media screen and (max-width: 700px) {
+@media screen and (max-width: 800px) {
     .horizontal-on-mobile {
         margin: 5px;
         width: calc(100% - 10px);

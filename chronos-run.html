@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RedLeaf Systems -- CHRONOS</title>
+  <link rel="stylesheet" href="styles.css" />
+
+  <link rel="icon" type="image/x-icon" href="favicon.svg" />
+
+  <style>
+    /* ============================================================
+       Chronos — page-specific styles
+       ============================================================ */
+    :root { color-scheme: dark; }
+
+    /* ---- Tabs ---- */
+    .tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      width: fit-content;
+      max-width: 100%;
+      margin-top: 15px;
+      padding: 6px;
+      background-color: var(--bg-2);
+      border-radius: 14px;
+      box-sizing: border-box;
+    }
+    .tab-btn {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 15px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      background-color: transparent;
+      border: 1px solid transparent;
+      border-radius: 9px;
+      padding: 10px 20px;
+      cursor: pointer;
+      transition: all 0.4s ease-in-out;
+    }
+    .tab-btn:hover {
+      color: var(--cream);
+      background-color: rgba(0, 0, 0, 0.35);
+      border-radius: 14px;
+    }
+    .tab-btn.active {
+      color: var(--cream);
+      background-color: var(--red-dim);
+      border-color: var(--border);
+      border-radius: 14px;
+    }
+
+    /* ---- Panels ---- */
+    .panel { display: none; padding-top: 18px; }
+    .panel.active { display: block; animation: panelIn 0.45s ease both; }
+
+    @keyframes panelIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .panel-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+    .panel-head h3 { font-size: clamp(24px, 3.5vw, 36px); }
+    .panel-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+
+    /* Buttons built from .button need <button> resets */
+    button.button {
+      border: none;
+      cursor: pointer;
+      font-size: 15px;
+      padding: 10px 18px;
+    }
+
+    /* ---- Spreadsheet ---- */
+    .sheet-wrap {
+      width: 100%;
+      overflow-x: auto;
+      padding-bottom: 4px;
+    }
+    .sheet {
+      width: 100%;
+      min-width: 620px;
+      table-layout: fixed;
+      border-collapse: separate;
+      border-spacing: 0 8px;
+    }
+    .col-name   { width: 42%; }
+    .col-course { width: 24%; }
+    .col-due    { width: 24%; }
+    .col-del    { width: 10%; }
+
+    .sheet th {
+      text-align: left;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      font-weight: 400;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      padding: 0 14px;
+    }
+
+    .sheet td {
+      background-color: var(--bg-3);
+      border-top: 1px solid transparent;
+      border-bottom: 1px solid transparent;
+      transition: background-color 0.4s ease-in-out, border-color 0.4s ease-in-out;
+    }
+    .sheet tbody tr td:first-child {
+      border-left: 5px solid var(--course-color, var(--bg-4));
+      border-radius: 10px 0 0 10px;
+    }
+    .sheet tbody tr td:last-child { border-radius: 0 10px 10px 0; }
+    .sheet tbody tr:hover td {
+      background-color: #2a0d11;
+      border-top-color: var(--red-dim);
+      border-bottom-color: var(--red-dim);
+    }
+    .sheet tbody tr.dragging {
+      opacity: 0.5;
+      cursor: grabbing;
+    }
+    .sheet tbody tr.drag-over-before td {
+      box-shadow: inset 0 -2px 0 var(--red);
+    }
+    .sheet tbody tr.drag-over-after td {
+      box-shadow: inset 0 2px 0 var(--red);
+    }
+    .sheet td.cell-actions { text-align: center; }
+    .row-action-group {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      flex-wrap: wrap;
+    }
+
+    /* ---- Cell inputs ---- */
+    .cell-input {
+      display: block;
+      width: 100%;
+      box-sizing: border-box;
+      background-color: transparent;
+      border: none;
+      outline: none;
+      color: var(--cream);
+      font-family: "Aptos", sans-serif;
+      font-weight: 300;
+      font-size: 16px;
+      padding: 13px 14px;
+      border-radius: 8px;
+      transition: background-color 0.3s ease-in-out;
+    }
+    .cell-input::placeholder { color: var(--text-dim); }
+    .cell-input:focus { background-color: rgba(200, 16, 46, 0.16); }
+
+    select.cell-input {
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      cursor: pointer;
+      padding-right: 38px;
+      background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%23b0a89e' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+    }
+    select.cell-input option {
+      background-color: var(--bg-2);
+      color: var(--cream);
+    }
+
+    input[type="date"].cell-input {
+      cursor: pointer;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 15px;
+    }
+    input[type="date"].cell-input::-webkit-calendar-picker-indicator {
+      cursor: pointer;
+      opacity: 0.55;
+      transition: opacity 0.3s ease-in-out;
+    }
+    input[type="date"].cell-input::-webkit-calendar-picker-indicator:hover { opacity: 1; }
+
+    /* ---- Row action buttons ---- */
+    .drag-handle,
+    .row-delete {
+      background-color: transparent;
+      border: none;
+      color: var(--text-dim);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 18px;
+      line-height: 1;
+      padding: 7px 8px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: color 0.3s ease-in-out, background-color 0.3s ease-in-out, opacity 0.2s ease;
+    }
+        .drag-handle {
+            cursor: grab;
+            letter-spacing: -0.08em;
+        }
+        .drag-handle:active {
+            cursor: grabbing;
+        }
+        .drag-handle:hover,
+    .row-delete:hover {
+      color: var(--white);
+      background-color: var(--red);
+    }
+    .row-delete {
+      font-size: 22px;
+      padding: 8px 12px;
+    }
+
+    /* ---- Empty state ---- */
+    .empty {
+      color: var(--text-dim);
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 14px;
+      letter-spacing: 0.04em;
+      line-height: 1.6;
+      padding: 18px 4px;
+      margin: 0;
+    }
+
+    /* ---- Courses ---- */
+    .course-form {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 12px;
+      padding: 16px;
+      background-color: var(--bg-2);
+      border-radius: 14px;
+      margin-bottom: 16px;
+    }
+    .text-input {
+      flex: 1 1 240px;
+      min-width: 0;
+      box-sizing: border-box;
+      background-color: var(--bg-3);
+      border: 1px solid transparent;
+      border-radius: 8px;
+      color: var(--cream);
+      font-family: "Aptos", sans-serif;
+      font-weight: 300;
+      font-size: 16px;
+      padding: 11px 14px;
+      outline: none;
+      transition: border-color 0.3s ease-in-out, background-color 0.3s ease-in-out;
+    }
+    .text-input::placeholder { color: var(--text-dim); }
+    .text-input:focus {
+      border-color: var(--border);
+      background-color: var(--bg-4);
+    }
+
+    .swatches { display: flex; flex-wrap: wrap; gap: 7px; }
+    .swatch {
+      width: 26px;
+      height: 26px;
+      padding: 0;
+      border: 2px solid transparent;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: transform 0.25s ease-in-out, border-color 0.25s ease-in-out;
+    }
+    .swatch:hover { transform: scale(1.18); }
+    .swatch.selected { border-color: var(--cream); transform: scale(1.12); }
+
+    .course-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 12px;
+      margin-bottom: 8px;
+      background-color: var(--bg-3);
+      border: 1px solid transparent;
+      border-radius: 12px;
+      transition: border-color 0.4s ease-in-out, background-color 0.4s ease-in-out;
+    }
+    .course-item:hover {
+      border-color: var(--red-dim);
+      background-color: var(--bg-2);
+    }
+
+    .course-color {
+      flex: 0 0 auto;
+      width: 30px;
+      height: 30px;
+      padding: 0;
+      border: none;
+      border-radius: 50%;
+      background: none;
+      cursor: pointer;
+      appearance: none;
+      -webkit-appearance: none;
+      overflow: hidden;
+    }
+    .course-color::-webkit-color-swatch-wrapper { padding: 0; }
+    .course-color::-webkit-color-swatch { border: none; border-radius: 50%; }
+    .course-color::-moz-color-swatch { border: none; border-radius: 50%; }
+
+    .course-item .text-input {
+      flex: 1 1 auto;
+      background-color: transparent;
+      border-color: transparent;
+      padding: 9px 12px;
+    }
+    .course-item .text-input:focus {
+      background-color: rgba(0, 0, 0, 0.35);
+      border-color: var(--red-dim);
+    }
+
+    .course-count {
+      flex: 0 0 auto;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      white-space: nowrap;
+    }
+    @media screen and (max-width: 560px) {
+      .course-count { display: none; }
+    }
+
+    /* Slightly tighter hero for an app page */
+    .hero h1 { margin-bottom: 10px; }
+    .hero p { margin: 0; max-width: 60ch; color: var(--text-muted); }
+  </style>
+</head>
+<body>
+    <div class="content fade-in">
+        <a href="chronos.html" class="button fade-up fade-up-1">Back to Online Tools</a>
+
+        <!-- ================= Tabs ================= -->
+        <div class="tabs fade-up fade-up-2" role="tablist" aria-label="Chronos sections">
+            <button type="button" class="tab-btn active" role="tab" aria-selected="true"
+                    data-panel="panel-assignments">Assignments</button>
+            <button type="button" class="tab-btn" role="tab" aria-selected="false"
+                    data-panel="panel-courses">Courses</button>
+        </div>
+
+        <!-- ================= Assignments ================= -->
+        <section class="panel active" id="panel-assignments" role="tabpanel" aria-label="Assignments">
+            <div class="panel-head">
+                <h3>Assignments</h3>
+                <div class="panel-actions">
+                    <button type="button" class="button" id="sortBtn">Sort by due date</button>
+                    <button type="button" class="button" id="addAssignmentBtn">+ Add assignment</button>
+                </div>
+            </div>
+
+            <div class="sheet-wrap">
+                <table class="sheet">
+                    <thead>
+                        <tr>
+                            <th class="col-name">Assignment</th>
+                            <th class="col-course">Course</th>
+                            <th class="col-due">Due date</th>
+                            <th class="col-del"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="assignmentRows"></tbody>
+                </table>
+            </div>
+
+            <p class="empty" id="assignmentEmpty">
+                Nothing here yet. Hit <strong>+ Add assignment</strong> to start planning —
+                press <strong>Enter</strong> in the name field to add the next one.
+            </p>
+        </section>
+
+        <!-- ================= Courses ================= -->
+        <section class="panel" id="panel-courses" role="tabpanel" aria-label="Courses">
+            <div class="panel-head">
+                <h3>Courses</h3>
+            </div>
+
+            <div class="course-form">
+                <input type="text" id="newCourseName" class="text-input" maxlength="60"
+                       placeholder="New course name (e.g. Chemistry 11)" autocomplete="off" />
+                <div class="swatches" id="newCourseSwatches" aria-label="Course colour"></div>
+                <button type="button" class="button" id="addCourseBtn">+ Add course</button>
+            </div>
+
+            <div id="courseList"></div>
+
+            <p class="empty" id="courseEmpty">
+                No courses yet. Add one above and it will appear in the course dropdown
+                on the Assignments tab.
+            </p>
+        </section>
+    </div>
+
+    <script src="js.js"></script>
+    <script>
+    (function () {
+        'use strict';
+
+        /* ============================================================
+           Cookie helpers
+           ============================================================ */
+        var COOKIE_COURSES     = 'chronos_courses';
+        var COOKIE_ASSIGNMENTS = 'chronos_assignments';
+        var COOKIE_DAYS        = 400;
+
+        function setCookie(name, value, days) {
+            var d = new Date();
+            d.setTime(d.getTime() + days * 24 * 60 * 60 * 1000);
+            document.cookie = name + '=' + encodeURIComponent(value) +
+                              ';expires=' + d.toUTCString() +
+                              ';path=/;SameSite=Lax';
+        }
+
+        function getCookie(name) {
+            var parts = document.cookie ? document.cookie.split('; ') : [];
+            for (var i = 0; i < parts.length; i++) {
+                var idx = parts[i].indexOf('=');
+                if (idx > -1 && parts[i].slice(0, idx) === name) {
+                    return decodeURIComponent(parts[i].slice(idx + 1));
+                }
+            }
+            return null;
+        }
+
+        /* ============================================================
+           Constants / state
+           ============================================================ */
+        var PALETTE = [
+            '#C8102E', '#FF5858', '#FF9F43', '#FFD166', '#2EC4B6',
+            '#3D8BFD', '#9B5DE5', '#F15BB5', '#8D99AE'
+        ];
+
+        var state = { courses: [], assignments: [] };
+        var selectedSwatch = PALETTE[0];
+        var draggedAssignmentId = null;
+
+        function uid() {
+            return 'id' + Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+        }
+
+        function safeParseArray(str) {
+            try {
+                var v = JSON.parse(str);
+                return Array.isArray(v) ? v : [];
+            } catch (e) {
+                return [];
+            }
+        }
+
+        /* ============================================================
+           Load / save
+           ============================================================ */
+        function loadState() {
+            state.courses = safeParseArray(getCookie(COOKIE_COURSES)).map(function (c) {
+                return {
+                    id:    String(c && c.id ? c.id : uid()),
+                    name:  String(c && c.name ? c.name : 'Untitled course'),
+                    color: (c && typeof c.color === 'string') ? c.color : PALETTE[0]
+                };
+            });
+
+            state.assignments = safeParseArray(getCookie(COOKIE_ASSIGNMENTS)).map(function (a) {
+                return {
+                    id:       String(a && a.id ? a.id : uid()),
+                    name:     String(a && a.name ? a.name : ''),
+                    courseId: String(a && a.courseId ? a.courseId : ''),
+                    due:      String(a && a.due ? a.due : '')
+                };
+            });
+        }
+
+        function saveState() {
+            var coursesRaw     = JSON.stringify(state.courses);
+            var assignmentsRaw = JSON.stringify(state.assignments);
+
+            setCookie(COOKIE_COURSES, coursesRaw, COOKIE_DAYS);
+            setCookie(COOKIE_ASSIGNMENTS, assignmentsRaw, COOKIE_DAYS);
+
+            // Read back — catches "cookies disabled" and "cookie is too big"
+            if (getCookie(COOKIE_COURSES) !== coursesRaw ||
+                getCookie(COOKIE_ASSIGNMENTS) !== assignmentsRaw) {
+                console.warn('Chronos: could not save everything to cookies ' +
+                             '(cookies disabled, or the 4 KB cookie limit was hit).');
+            }
+        }
+
+        /* ============================================================
+           Element refs
+           ============================================================ */
+        var els = {
+            assignmentRows:  document.getElementById('assignmentRows'),
+            assignmentEmpty: document.getElementById('assignmentEmpty'),
+            courseList:      document.getElementById('courseList'),
+            courseEmpty:     document.getElementById('courseEmpty'),
+            newCourseName:   document.getElementById('newCourseName'),
+            newCourseSwatches: document.getElementById('newCourseSwatches'),
+            addCourseBtn:    document.getElementById('addCourseBtn'),
+            addAssignmentBtn: document.getElementById('addAssignmentBtn'),
+            sortBtn:         document.getElementById('sortBtn')
+        };
+
+        /* ============================================================
+           Assignments
+           ============================================================ */
+        function courseById(id) {
+            for (var i = 0; i < state.courses.length; i++) {
+                if (state.courses[i].id === id) return state.courses[i];
+            }
+            return null;
+        }
+
+        function applyCourseColor(tr, courseId) {
+            var course = courseById(courseId);
+            tr.style.setProperty('--course-color', course ? course.color : 'var(--bg-4)');
+        }
+
+        function fillCourseSelect(select, selectedId) {
+            select.innerHTML = '';
+
+            var none = document.createElement('option');
+            none.value = '';
+            none.textContent = 'Unassigned';
+            select.appendChild(none);
+
+            state.courses.forEach(function (c) {
+                var opt = document.createElement('option');
+                opt.value = c.id;
+                opt.textContent = c.name;
+                select.appendChild(opt);
+            });
+
+            select.value = courseById(selectedId) ? selectedId : '';
+        }
+
+        function buildAssignmentRow(a) {
+            var tr = document.createElement('tr');
+            tr.dataset.id = a.id;
+            applyCourseColor(tr, a.courseId);
+
+            function startDragging(e) {
+                draggedAssignmentId = a.id;
+                tr.classList.add('dragging');
+                if (e.dataTransfer) {
+                    e.dataTransfer.effectAllowed = 'move';
+                    e.dataTransfer.setData('text/plain', a.id);
+                }
+            }
+
+            tr.addEventListener('dragover', function (e) {
+                if (!draggedAssignmentId || draggedAssignmentId === a.id) return;
+                e.preventDefault();
+                var rect = tr.getBoundingClientRect();
+                var before = e.clientY < rect.top + rect.height / 2;
+                var rows = els.assignmentRows.querySelectorAll('tr');
+                Array.prototype.forEach.call(rows, function (row) {
+                    row.classList.remove('drag-over-before', 'drag-over-after');
+                });
+                tr.classList.add(before ? 'drag-over-before' : 'drag-over-after');
+            });
+
+            tr.addEventListener('dragleave', function () {
+                tr.classList.remove('drag-over-before', 'drag-over-after');
+            });
+
+            tr.addEventListener('drop', function (e) {
+                if (!draggedAssignmentId || draggedAssignmentId === a.id) return;
+                e.preventDefault();
+                var rect = tr.getBoundingClientRect();
+                var before = e.clientY < rect.top + rect.height / 2;
+                reorderAssignmentByTarget(draggedAssignmentId, a.id, before);
+                tr.classList.remove('drag-over-before', 'drag-over-after');
+            });
+
+            tr.addEventListener('dragend', function () {
+                draggedAssignmentId = null;
+                tr.classList.remove('dragging');
+                var rows = els.assignmentRows.querySelectorAll('tr');
+                Array.prototype.forEach.call(rows, function (row) {
+                    row.classList.remove('drag-over-before', 'drag-over-after');
+                });
+            });
+
+            /* ---- Name ---- */
+            var tdName = document.createElement('td');
+            var nameInput = document.createElement('input');
+            nameInput.type = 'text';
+            nameInput.className = 'cell-input';
+            nameInput.placeholder = 'Assignment name';
+            nameInput.maxLength = 120;
+            nameInput.value = a.name;
+            nameInput.autocomplete = 'off';
+
+            nameInput.addEventListener('input', function () {
+                a.name = nameInput.value;
+                saveState();
+            });
+
+            nameInput.addEventListener('keydown', function (e) {
+                if (e.key !== 'Enter') return;
+                e.preventDefault();
+                var idx = state.assignments.indexOf(a);
+                var fresh = { id: uid(), name: '', courseId: '', due: '' };
+                state.assignments.splice(idx + 1, 0, fresh);
+                saveState();
+                renderAssignments();
+                focusAssignment(fresh.id);
+            });
+
+            tdName.appendChild(nameInput);
+            tr.appendChild(tdName);
+
+            /* ---- Course ---- */
+            var tdCourse = document.createElement('td');
+            var select = document.createElement('select');
+            select.className = 'cell-input';
+            fillCourseSelect(select, a.courseId);
+
+            select.addEventListener('change', function () {
+                a.courseId = select.value;
+                applyCourseColor(tr, a.courseId);
+                saveState();
+            });
+
+            tdCourse.appendChild(select);
+            tr.appendChild(tdCourse);
+
+            /* ---- Due date ---- */
+            var tdDue = document.createElement('td');
+            var dateInput = document.createElement('input');
+            dateInput.type = 'date';
+            dateInput.className = 'cell-input';
+            dateInput.value = a.due;
+
+            function syncDate() {
+                a.due = dateInput.value;
+                saveState();
+            }
+            dateInput.addEventListener('change', syncDate);
+            dateInput.addEventListener('input', syncDate);
+
+            tdDue.appendChild(dateInput);
+            tr.appendChild(tdDue);
+
+            /* ---- Reorder / delete ---- */
+            var tdDel = document.createElement('td');
+            tdDel.className = 'cell-actions';
+
+            var actionGroup = document.createElement('div');
+            actionGroup.className = 'row-action-group';
+
+            var dragHandle = document.createElement('button');
+            dragHandle.type = 'button';
+            dragHandle.className = 'drag-handle';
+            dragHandle.textContent = '::';
+            dragHandle.title = 'Drag to reorder assignment';
+            dragHandle.setAttribute('aria-label', 'Drag to reorder assignment');
+            dragHandle.draggable = true;
+            dragHandle.addEventListener('dragstart', startDragging);
+
+            var del = document.createElement('button');
+            del.type = 'button';
+            del.className = 'row-delete';
+            del.textContent = '×';
+            del.title = 'Delete assignment';
+            del.setAttribute('aria-label', 'Delete assignment');
+            del.addEventListener('click', function () {
+                state.assignments = state.assignments.filter(function (x) {
+                    return x.id !== a.id;
+                });
+                saveState();
+                renderAssignments();
+            });
+
+            actionGroup.appendChild(dragHandle);
+            actionGroup.appendChild(del);
+            tdDel.appendChild(actionGroup);
+            tr.appendChild(tdDel);
+
+            return tr;
+        }
+
+        function renderAssignments() {
+            els.assignmentRows.innerHTML = '';
+
+            state.assignments.forEach(function (a) {
+                els.assignmentRows.appendChild(buildAssignmentRow(a));
+            });
+
+            els.assignmentEmpty.style.display = state.assignments.length ? 'none' : 'block';
+            updateCourseCounts();
+        }
+
+        function focusAssignment(id) {
+            var tr = els.assignmentRows.querySelector('tr[data-id="' + id + '"]');
+            if (!tr) return;
+            var input = tr.querySelector('input[type="text"]');
+            if (input) input.focus();
+        }
+
+        function addAssignment() {
+            var fresh = { id: uid(), name: '', courseId: '', due: '' };
+            state.assignments.push(fresh);
+            saveState();
+            renderAssignments();
+            focusAssignment(fresh.id);
+        }
+
+        function reorderAssignmentByTarget(id, targetId, before) {
+            var fromIndex = state.assignments.findIndex(function (item) {
+                return item.id === id;
+            });
+            var toIndex = state.assignments.findIndex(function (item) {
+                return item.id === targetId;
+            });
+            if (fromIndex === -1 || toIndex === -1 || fromIndex === toIndex) return;
+
+            var item = state.assignments.splice(fromIndex, 1)[0];
+            var insertIndex = toIndex;
+
+            if (fromIndex < toIndex) {
+                insertIndex = before ? toIndex - 1 : toIndex;
+            } else if (fromIndex > toIndex) {
+                insertIndex = before ? toIndex : toIndex + 1;
+            }
+
+            if (insertIndex < 0) insertIndex = 0;
+            if (insertIndex > state.assignments.length) insertIndex = state.assignments.length;
+
+            state.assignments.splice(insertIndex, 0, item);
+            saveState();
+            renderAssignments();
+        }
+
+        function sortByDueDate() {
+            state.assignments.sort(function (a, b) {
+                if (!a.due && !b.due) return 0;
+                if (!a.due) return 1;
+                if (!b.due) return -1;
+                return a.due < b.due ? -1 : (a.due > b.due ? 1 : 0);
+            });
+            saveState();
+            renderAssignments();
+        }
+
+        /* ============================================================
+           Courses
+           ============================================================ */
+        function updateCourseCounts() {
+            var items = els.courseList.querySelectorAll('.course-item');
+            Array.prototype.forEach.call(items, function (item) {
+                var id = item.dataset.id;
+                var count = state.assignments.filter(function (a) {
+                    return a.courseId === id;
+                }).length;
+                var label = item.querySelector('.course-count');
+                if (label) {
+                    label.textContent = count === 1 ? '1 assignment' : count + ' assignments';
+                }
+            });
+        }
+
+        function buildCourseItem(c) {
+            var row = document.createElement('div');
+            row.className = 'course-item';
+            row.dataset.id = c.id;
+
+            /* Colour picker */
+            var color = document.createElement('input');
+            color.type = 'color';
+            color.className = 'course-color';
+            color.value = c.color;
+            color.title = 'Change colour';
+            color.addEventListener('input', function () {
+                c.color = color.value;
+                saveState();
+                refreshCourseSelects();
+            });
+            row.appendChild(color);
+
+            /* Editable name */
+            var name = document.createElement('input');
+            name.type = 'text';
+            name.className = 'text-input';
+            name.value = c.name;
+            name.maxLength = 60;
+            name.placeholder = 'Course name';
+            name.autocomplete = 'off';
+            name.addEventListener('input', function () {
+                c.name = name.value;
+                saveState();
+                refreshCourseSelects();
+            });
+            row.appendChild(name);
+
+            /* Assignment counter */
+            var count = document.createElement('span');
+            count.className = 'course-count';
+            row.appendChild(count);
+
+            /* Delete */
+            var del = document.createElement('button');
+            del.type = 'button';
+            del.className = 'row-delete';
+            del.textContent = '×';
+            del.title = 'Delete course';
+            del.setAttribute('aria-label', 'Delete course');
+            del.addEventListener('click', function () {
+                var used = state.assignments.filter(function (a) {
+                    return a.courseId === c.id;
+                }).length;
+
+                if (used > 0 && !window.confirm(
+                    'Delete "' + c.name + '"?\n' + used +
+                    ' assignment(s) will become unassigned.')) {
+                    return;
+                }
+
+                state.courses = state.courses.filter(function (x) {
+                    return x.id !== c.id;
+                });
+                state.assignments.forEach(function (a) {
+                    if (a.courseId === c.id) a.courseId = '';
+                });
+
+                saveState();
+                renderCourses();
+                renderAssignments();
+            });
+            row.appendChild(del);
+
+            return row;
+        }
+
+        function renderCourses() {
+            els.courseList.innerHTML = '';
+
+            state.courses.forEach(function (c) {
+                els.courseList.appendChild(buildCourseItem(c));
+            });
+
+            els.courseEmpty.style.display = state.courses.length ? 'none' : 'block';
+
+            updateCourseCounts();
+            refreshCourseSelects();
+        }
+
+        /* Re-fill every assignment row's dropdown without rebuilding the rows
+           (so the user doesn't lose focus while typing). */
+        function refreshCourseSelects() {
+            var rows = els.assignmentRows.querySelectorAll('tr');
+            Array.prototype.forEach.call(rows, function (tr) {
+                var a = null;
+                for (var i = 0; i < state.assignments.length; i++) {
+                    if (state.assignments[i].id === tr.dataset.id) {
+                        a = state.assignments[i];
+                        break;
+                    }
+                }
+                if (!a) return;
+
+                var select = tr.querySelector('select');
+                if (select) fillCourseSelect(select, a.courseId);
+                applyCourseColor(tr, a.courseId);
+            });
+        }
+
+        function addCourse() {
+            var name = els.newCourseName.value.trim();
+            if (!name) {
+                els.newCourseName.focus();
+                return;
+            }
+
+            state.courses.push({ id: uid(), name: name, color: selectedSwatch });
+            saveState();
+
+            els.newCourseName.value = '';
+            els.newCourseName.focus();
+
+            renderCourses();
+        }
+
+        /* Colour swatch picker in the "add course" form */
+        function buildSwatches() {
+            PALETTE.forEach(function (color, i) {
+                var b = document.createElement('button');
+                b.type = 'button';
+                b.className = 'swatch' + (i === 0 ? ' selected' : '');
+                b.style.backgroundColor = color;
+                b.title = color;
+                b.setAttribute('aria-label', 'Colour ' + color);
+
+                b.addEventListener('click', function () {
+                    selectedSwatch = color;
+                    var all = els.newCourseSwatches.querySelectorAll('.swatch');
+                    Array.prototype.forEach.call(all, function (s) {
+                        s.classList.remove('selected');
+                    });
+                    b.classList.add('selected');
+                });
+
+                els.newCourseSwatches.appendChild(b);
+            });
+        }
+
+        /* ============================================================
+           Tabs
+           ============================================================ */
+        function initTabs() {
+            var buttons = document.querySelectorAll('.tab-btn');
+            Array.prototype.forEach.call(buttons, function (btn) {
+                btn.addEventListener('click', function () {
+                    Array.prototype.forEach.call(buttons, function (b) {
+                        var on = (b === btn);
+                        b.classList.toggle('active', on);
+                        b.setAttribute('aria-selected', on ? 'true' : 'false');
+                    });
+
+                    var panels = document.querySelectorAll('.panel');
+                    Array.prototype.forEach.call(panels, function (p) {
+                        p.classList.toggle('active', p.id === btn.dataset.panel);
+                    });
+                });
+            });
+        }
+
+        /* ============================================================
+           Boot
+           ============================================================ */
+        function init() {
+            loadState();
+            buildSwatches();
+            initTabs();
+
+            renderCourses();
+            renderAssignments();
+
+            els.addAssignmentBtn.addEventListener('click', addAssignment);
+            els.sortBtn.addEventListener('click', sortByDueDate);
+            els.addCourseBtn.addEventListener('click', addCourse);
+
+            els.newCourseName.addEventListener('keydown', function (e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    addCourse();
+                }
+            });
+        }
+
+        init();
+    })();
+    </script>
+</body>
+</html>

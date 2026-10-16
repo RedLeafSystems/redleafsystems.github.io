@@ -36,14 +36,43 @@ function playSound(src) {
 // Button sounds
 const isMobile = window.matchMedia('(pointer: coarse)').matches;
 
-if (isMobile) {
+if (!isMobile) {
     document.querySelectorAll('a').forEach(link => {
-        link.addEventListener('touchstart', () => playSound('sounds/mobile-click.mp3'), { passive: true });
+
+        // USE TRY-CATCH
+        try {
+            if (urlExists("sounds/click.mp3") && urlExists("sounds/unclick.mp3")) {
+                link.addEventListener('mousedown', () => playSound('sounds/click.mp3'));
+                link.addEventListener('mouseup', () => playSound('sounds/unclick.mp3'));
+            }
+            else {
+                link.addEventListener('mousedown', () => playSound('../sounds/click.mp3'));
+                link.addEventListener('mouseup', () => playSound('../sounds/unclick.mp3'));
+            }
+        } catch (error) {
+            console.error("Error checking sound files:", error);
+        }
+        
+        if (urlExists("sounds/click.mp3") && urlExists("sounds/unclick.mp3")) {
+            link.addEventListener('mousedown', () => playSound('sounds/click.mp3'));
+            link.addEventListener('mouseup', () => playSound('sounds/unclick.mp3'));
+        }
+        else {
+            link.addEventListener('mousedown', () => playSound('../sounds/click.mp3'));
+            link.addEventListener('mouseup', () => playSound('../sounds/unclick.mp3'));
+        }
     });
 }
-else {
-    document.querySelectorAll('a').forEach(link => {
-        link.addEventListener('mousedown', () => playSound('sounds/click.mp3'));
-        link.addEventListener('mouseup', () => playSound('sounds/unclick.mp3'));
-    });
+
+
+
+// Utility functions
+async function urlExists(url) {
+    try {
+        const response = await fetch(url, { method: 'HEAD' });
+        return response.ok; // true if status is 200–299
+    } catch (err) {
+        console.error("Error checking URL:", err);
+        return false;
+    }
 }
